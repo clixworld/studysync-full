@@ -1,0 +1,187 @@
+/* ── Fonts & Tokens ─────────────────────────────────── */
+:root {
+  --font: 'DM Sans', sans-serif;
+  --accent: #6C63FF;
+  --accent-light: #EEEDF8;
+  --accent-dark: #534AB7;
+  --canvas-color: #1D9E75;
+  --canvas-light: #E1F5EE;
+  --study-color: #378ADD;
+  --study-light: #E6F1FB;
+  --personal-color: #D4537E;
+  --personal-light: #FBEAF0;
+  --danger: #E24B4A;
+  --danger-light: #FCEBEB;
+  --warning: #EF9F27;
+  --warning-light: #FAEEDA;
+  --bg: #ffffff;
+  --bg2: #F7F7F5;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #1a1a18;
+  --text2: #6b6b68;
+  --text3: #a0a09c;
+  --radius: 12px;
+  --radius-lg: 18px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --bg2: #242424;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0f0ee;
+    --text2: #a0a09c;
+    --text3: #6b6b68;
+    --accent-light: #2a2860;
+    --canvas-light: #0d3326;
+    --study-light: #0d2540;
+    --personal-light: #3a1525;
+    --warning-light: #3a2a08;
+    --danger-light: #3a0d0d;
+  }
+}
+
+/* ── Reset ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button { font-family: var(--font); cursor: pointer; }
+input, select { font-family: var(--font); }
+
+/* ── App shell ──────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Page transitions ───────────────────────────────── */
+.page-enter {
+  animation: pageIn 0.28s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Shared slot styles ─────────────────────────────── */
+.slot-canvas   { background: var(--canvas-light);   border-left: 3px solid var(--canvas-color);   border-radius: 0 var(--radius) var(--radius) 0; }
+.slot-study    { background: var(--study-light);    border-left: 3px solid var(--study-color);    border-radius: 0 var(--radius) var(--radius) 0; }
+.slot-personal { background: var(--personal-light); border-left: 3px solid var(--personal-color); border-radius: 0 var(--radius) var(--radius) 0; }
+
+.slot-canvas   .slot-title, .slot-canvas   .slot-sub { color: #085041; }
+.slot-study    .slot-title, .slot-study    .slot-sub { color: #0C447C; }
+.slot-personal .slot-title, .slot-personal .slot-sub { color: #72243E; }
+
+@media (prefers-color-scheme: dark) {
+  .slot-canvas   .slot-title, .slot-canvas   .slot-sub { color: #9FE1CB; }
+  .slot-study    .slot-title, .slot-study    .slot-sub { color: #85B7EB; }
+  .slot-personal .slot-title, .slot-personal .slot-sub { color: #ED93B1; }
+}
+
+/* ── Shared animations ──────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.9); }
+}
+@keyframes shimmer {
+  0%,100% { opacity: 0.4; }
+  50%      { opacity: 0.8; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* ── Skeleton ───────────────────────────────────────── */
+.skeleton {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ── Bottom sheet modal ─────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.45);
+  display: flex; align-items: flex-end;
+  animation: fadeOverlay 0.2s ease both;
+}
+@keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-sheet {
+  background: var(--bg);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 40px;
+  width: 100%; max-width: 480px; margin: 0 auto;
+  animation: sheetUp 0.35s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+.sheet-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--border2); margin: 0 auto 18px;
+}
+
+.sheet-title {
+  font-size: 18px; font-weight: 600;
+  color: var(--text); margin-bottom: 18px;
+}
+
+/* ── Form fields ────────────────────────────────────── */
+.field-label {
+  display: block; font-size: 11px; font-weight: 500;
+  color: var(--text2); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 5px; margin-top: 14px;
+}
+
+.field-input {
+  width: 100%; font-size: 14px; padding: 10px 13px;
+  border: 0.5px solid var(--border2); border-radius: 10px;
+  background: var(--bg2); color: var(--text);
+  outline: none; transition: border-color 0.15s;
+  font-family: var(--font);
+}
+.field-input:focus { border-color: var(--accent); }
+
+.save-btn {
+  width: 100%; padding: 14px; margin-top: 18px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 13px;
+  font-size: 15px; font-weight: 600;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background 0.15s;
+}
+.save-btn:hover  { transform: scale(1.02); background: var(--accent-dark); }
+.save-btn:active { transform: scale(0.97); }
+
+/* ── Type chips ─────────────────────────────────────── */
+.type-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.type-chip {
+  font-size: 12px; padding: 6px 14px; border-radius: 99px;
+  border: 0.5px solid var(--border2); background: var(--bg2);
+  color: var(--text2); font-weight: 500;
+  transition: all 0.2s cubic-bezier(.34,1.56,.64,1);
+}
+.type-chip:hover { transform: scale(1.05); }
+.sel-study    { background: var(--study-light);    color: #0C447C; border-color: var(--study-color);    }
+.sel-canvas   { background: var(--canvas-light);   color: #085041; border-color: var(--canvas-color);   }
+.sel-personal { background: var(--personal-light); color: #72243E; border-color: var(--personal-color); }
